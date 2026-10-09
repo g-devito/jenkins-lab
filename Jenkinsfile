@@ -7,7 +7,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo "running Build stage of hello-pipeline"
-		echo '$APP_NAME:$BUILD_NUMBER-$GIT_COMMIT'
+		echo '${APP_NAME}:${BUILD_NUMBER}-${GIT_COMMIT}'
             }
         }
         stage('Test') {
