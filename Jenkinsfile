@@ -18,7 +18,7 @@ pipeline {
                 echo "running Test stage of hello-pipeline"
 		sh "docker run -d --name test-myapp-${BUILD_NUMBER} ${IMAGE}"
 		sh "sleep 2"
-		sh "docker exec test-myapp-${BUILD_NUMBER} wget -qO- http://localhost:8080 | grep 'Hello, World!'"
+		sh "docker exec test-myapp-${BUILD_NUMBER} wget -qO- http://127.0.0.1:8080 | grep 'Hello, World!'"
             }
         }
         stage('Deploy') {
