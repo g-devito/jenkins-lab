@@ -10,6 +10,7 @@ pipeline {
 		script {
 			env.IMAGE = "${APP_NAME}:${BUILD_NUMBER}-${GIT_COMMIT.take(7)}"
 		}
+		sh "docker build -t ${IMAGE} ." 
             }
         }
         stage('Test') {
