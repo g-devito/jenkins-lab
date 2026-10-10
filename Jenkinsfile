@@ -7,12 +7,15 @@ pipeline {
         stage('Build') {
             steps {
                 echo "running Build stage of hello-pipeline"
-		echo "${APP_NAME}:${BUILD_NUMBER}-${GIT_COMMIT.take(7)}"
+		script {
+			env.IMAGE = "${APP_NAME}:${BUILD_NUMBER}-${GIT_COMMIT.take(7)}"
+		}
             }
         }
         stage('Test') {
             steps {
                 echo "running Test stage of hello-pipeline"
+		echo "testing ${IMAGE}"
             }
         }
         stage('Deploy') {
