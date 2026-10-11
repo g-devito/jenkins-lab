@@ -47,8 +47,7 @@ pipeline {
     }
     stage('Deploy') {
       steps {
-        echo "Deploying ${IMAGE} on ${params.TARGET_ENV}"
-      }
+        echo "Deploying ${IMAGE} on ${params.TARGET_ENV}" }
     }
   }
   post {
