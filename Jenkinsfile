@@ -5,7 +5,8 @@ pipeline {
   }
   environment {
     APP_NAME = 'myapp'
-  REGISTRY = 'quay.io/giochac99'
+    REGISTRY = 'quay.io/giochac99'
+    OCP_SERVER = 'https://api.rm3.7wse.p1.openshiftapps.com:6443'
   }
   stages {
     stage('Build') {
@@ -47,7 +48,13 @@ pipeline {
     }
     stage('Deploy') {
       steps {
-        echo "Deploying ${IMAGE} on ${params.TARGET_ENV}" }
+        echo "Deploying ${IMAGE} on ${params.TARGET_ENV}" 
+        withCredentials([string(credentialsId: 'openshift-token', variable: 'OC_TOKEN')]) {
+          sh 'oc login --token="$OC_TOKEN" --server="$OCP_SERVER"'
+          sh "oc set image deployment/myapp-deployment myapp=${IMAGE}"
+          sh "oc rollout status deployment/myapp-deployment --timeout=2m"
+        }
+      }
     }
   }
   post {
@@ -61,6 +68,7 @@ pipeline {
     always {
       sh "docker rm -f test-myapp-${BUILD_NUMBER} || true"
       sh "docker logout quay.io"
+      sh "oc logout || true"
     }
   }
 }
