@@ -55,6 +55,14 @@ pipeline {
           sh "oc rollout status deployment/myapp-deployment --timeout=2m"
         }
       }
+      post {
+        failure {
+          withCredentials([string(credentialsId: 'openshift-token', variable: 'OC_TOKEN')]) {
+            sh 'oc login --token="$OC_TOKEN" --server="$OCP_SERVER"'
+            sh 'oc rollout undo deployment/myapp-deployment'
+          }
+        }
+      }
     }
   }
   post {
